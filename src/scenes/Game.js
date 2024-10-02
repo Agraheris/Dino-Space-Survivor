@@ -8,7 +8,8 @@ export class Game extends Scene {
   }
 
   create() {
-    this.player = new Player(this, 400, 300, "player");
+    this.player = new Player(this, 300, 300, "player");
+    this.player.setVelocityX(this.player.speed);
     this.bullets = this.physics.add.group({
       classType: Confetti,
       runChildUpdate: true,
