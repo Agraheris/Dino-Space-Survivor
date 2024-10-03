@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
 import { Projectile } from "../class/Projectile";
@@ -7,8 +8,10 @@ export class Game extends Scene {
   constructor() {
     super("Game");
   }
+
   create() {
     this.player = new Player(this, 300, 300, "player");
+    this.unicorn = new Unicorn(this, 512, 384, "enemyA");
 
     this.bullets = this.physics.add.group({
       classType: Confetti,
@@ -85,6 +88,7 @@ export class Game extends Scene {
 
   update(time) {
     this.player.update(this.cursors, time);
+    this.unicorn.update();
     // Mettre à jour le joueur
 
     if (

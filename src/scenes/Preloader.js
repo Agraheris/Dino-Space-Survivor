@@ -26,6 +26,8 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
     this.load.image("logo", "logo.png");
+    this.load.image("enemyA", "enemy.png");
+
     this.load.spritesheet("player", "DinoSprites-red.png", {
       frameWidth: 24,
       frameHeight: 24,
