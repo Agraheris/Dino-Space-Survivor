@@ -14,41 +14,10 @@ export class Game extends Scene {
     this.createBackground();
     this.initializeGroups();
     this.createPlayer();
-    this.createEnemies();
     this.createInputHandlers();
-
-    this.player.bullets = this.bullets;
+    this.createTextDisplays();
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
-    this.input.once("pointerdown", () => {
-      this.scene.start("GameOver");
-      // this.scene.start("bullet");
-    });
-    // Pour que l'image prenne toute l'écran
-    const { width, height } = this.scale;
-    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
-    background.setDisplaySize(width, height);
-
-    // Initialisation des vies du joueur
-    this.lives = 5;
-    this.livesText = this.add.text(16, 64, "Lives: 5", {
-      fontSize: "48px",
-      fill: "#ffffff",
-    });
-
-    // Gérer plusieurs projectiles
-    this.projectiles = this.physics.add.group({
-      classType: Projectile,
-      runChildUpdate: true, // Met à jour les projectiles avec Update
-    });
-
-    // Initialiser le joueur
-    this.player = new Player(this, 400, 300, "player");
-    this.input.once("pointerdown", () => {
-      this.scene.start("GameOver");
-      this.player.play("walk");
-    });
 
     // Apparition des ennemis
     this.time.addEvent({
@@ -99,15 +68,7 @@ export class Game extends Scene {
       null,
       this
     );
-
-    // score
-    this.score = 0;
-    this.scoreText = this.add.text(16, 16, "Score: 0", {
-      fontSize: "48px",
-      fill: "#ffffff",
-    });
   }
-
   // Background
   createBackground() {
     const { width, height } = this.scale;
@@ -136,20 +97,30 @@ export class Game extends Scene {
     });
   }
 
-  // Joueur
   createPlayer() {
     this.player = new Player(this, 300, 300, "player");
     this.cursors = this.input.keyboard.createCursorKeys();
-  }
-
-  createEnemies() {
-    // this.unicorn = new Unicorn(this, 512, 384, "enemyA");
   }
 
   createInputHandlers() {
     this.input.once("pointerdown", () => {
       this.scene.start("GameOver");
       this.player.play("walk");
+    });
+  }
+
+  createTextDisplays() {
+    // vies
+    this.lives = 5;
+    this.livesText = this.add.text(16, 64, "Lives: 5", {
+      fontSize: "48px",
+      fill: "#ffffff",
+    });
+    // score
+    this.score = 0;
+    this.scoreText = this.add.text(16, 16, "Score: 0", {
+      fontSize: "48px",
+      fill: "#ffffff",
     });
   }
 
@@ -161,7 +132,6 @@ export class Game extends Scene {
     const randomY = Phaser.Math.Between(0, height);
 
     const unicorn = new Unicorn(this, randomX, randomY, "enemyA");
-
     this.enemyGroup.add(unicorn);
 
     // Tirer en direction du joueur
@@ -175,20 +145,16 @@ export class Game extends Scene {
     });
   }
 
-  //  Créer des ennemis qui poursuit le joueur
   spawnChasingEnemy() {
     const { width, height } = this.scale;
 
-    // Position aléatoire pour l'ennemi
     const randomX = Phaser.Math.Between(0, width);
     const randomY = Phaser.Math.Between(0, height);
     const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyA");
 
     this.physics.moveToObject(chasingEnemy, this.player, 50);
-    // Vitesse de l'ennemi qui poursuit le joueur
   }
 
-  // Tirer un projectile attiré vers le joueur
   shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
@@ -196,7 +162,6 @@ export class Game extends Scene {
       projectile.setFrame(24);
       projectile.setPosition(enemy.x, enemy.y);
       this.physics.moveToObject(projectile, this.player, 100);
-      // Vitesse du projectile
     }
   }
 
