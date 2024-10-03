@@ -8,46 +8,11 @@ export class Game extends Scene {
     super("Game");
   }
   create() {
-    this.score = 0;
-    this.scoreText = this.add.text(16, 16, "Score: 0", {
-      fontSize: "48px",
-      fill: "#FFFFFF",
-    });
-    this.player = new Player(this, 300, 300, "player");
-
-    this.bullets = this.physics.add.group({
-      classType: Confetti,
-      runChildUpdate: true,
-      maxSize: -1,
-    });
-
-    this.player.bullets = this.bullets;
-
-    this.cursors = this.input.keyboard.createCursorKeys();
-
-    this.input.once("pointerdown", () => {
-      this.scene.start("GameOver");
-      // this.scene.start("bullet");
-    });
-    // Pour que l'image prenne toute l'écran
-    const { width, height } = this.scale;
-    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
-    background.setDisplaySize(width, height);
-
-    // Gérer plusieurs projectiles
-    this.projectiles = this.physics.add.group({
-      classType: Projectile,
-      runChildUpdate: true, // Met à jour les projectiles avec Update
-    });
-
-    this.enemyGroup = this.physics.add.group();
-
-    // Initialiser le joueur
-    this.player = new Player(this, 400, 300, "player");
-    this.input.once("pointerdown", () => {
-      this.scene.start("GameOver");
-      this.player.play("walk");
-    });
+    this.createBackground();
+    this.initializeGroups();
+    this.createPlayer();
+    this.createEnemies();
+    this.createInputHandlers();
 
     // Réapparition des ennemis à intervalles réguliers
     this.time.addEvent({
@@ -56,9 +21,52 @@ export class Game extends Scene {
       callbackScope: this,
       loop: true, // Répéter l'événement
     });
+
+    // score
+    this.score = 0;
+    this.scoreText = this.add.text(16, 16, "Score: 0", {
+      fontSize: "48px",
+      fill: "#ffffff",
+    });
   }
 
-  // Créer de nouveaux ennemis
+  // Background
+  createBackground() {
+    const { width, height } = this.scale;
+    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
+    background.setDisplaySize(width, height);
+  }
+
+  initializeGroups() {
+    this.bullets = this.physics.add.group({
+      classType: Confetti,
+      runChildUpdate: true,
+      maxSize: -1,
+    });
+    this.projectiles = this.physics.add.group({
+      classType: Projectile,
+      runChildUpdate: true,
+    });
+    this.enemyGroup = this.physics.add.group();
+  }
+
+  // Joueur
+  createPlayer() {
+    this.player = new Player(this, 300, 300, "player");
+    this.cursors = this.input.keyboard.createCursorKeys();
+  }
+
+  createEnemies() {
+    this.unicorn = new Unicorn(this, 512, 384, "enemyA");
+  }
+
+  createInputHandlers() {
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      this.player.play("walk");
+    });
+  }
+
   spawnEnemies() {
     const { width, height } = this.scale;
 
@@ -78,7 +86,6 @@ export class Game extends Scene {
     });
   }
 
-  // Tirer un projectile attiré vers le joueur
   shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
@@ -90,7 +97,7 @@ export class Game extends Scene {
 
   update(time) {
     this.player.update(this.cursors, time);
-    // Mettre à jour le joueur
+    this.unicorn.update();
 
     if (
       this.player.body.velocity.x !== 0 ||
@@ -103,9 +110,16 @@ export class Game extends Scene {
       this.player.stop();
     }
   }
-}
 
-function shootSent(player) {
-  score += 10;
-  scoreText.setText("Score: " + score);
+  increaseScore(points) {
+    this.score += points;
+    this.scoreText.setText("Score : " + this.score);
+  }
+  /* 
+  shootSent(player) {
+
+
+    score += 10;
+    scoreText.setText("Score: " + score);
+  } */
 }
