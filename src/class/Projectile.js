@@ -23,9 +23,9 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
     // Détruire le projectile si il sort de l'écran
     if (
       this.x < 0 || // Trop à gauche
-      this.x > this.scene.sys.canvas.width || // Trop à droite
+      this.x > this.scale.width || // Trop à droite
       this.y < 0 || // Trop en haut
-      this.y > this.scene.sys.canvas.height // Trop en bas
+      this.y > this.scale.height // Trop en bas
     ) {
       this.destroy();
     }

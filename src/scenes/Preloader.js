@@ -25,14 +25,17 @@ export class Preloader extends Scene {
   preload() {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
-    this.load.spritesheet("player", "DinoSprites.png", {
-      frameHeight: 24,
+    this.load.image("logo", "logo.png");
+    this.load.spritesheet("player", "DinoSprites-red.png", {
       frameWidth: 24,
+      frameHeight: 24,
     });
-  }
-  // -----------------pour sonic        c'était 48, 48                   DinoSprites : 24, 24  MAX
 
-  //  ----------------pour sonic        le frameRate c'était 10          DinoSprites : 1
+    this.load.image("background-stars", "background_stars.webp");
+
+    this.load.image("player1", "triangle.png");
+    this.load.image("bullet", "bullet-red.png");
+  }
   create() {
     this.anims.create({
       key: "walk",
@@ -42,5 +45,10 @@ export class Preloader extends Scene {
     });
 
     this.scene.start("MainMenu");
+    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
+    this.load.spritesheet("player", "DinoSprites.png", {
+      frameHeight: 24,
+      frameWidth: 24,
+    });
   }
 }
