@@ -5,7 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, texture);
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setScale(4); // GROSSIR x2
+    this.setScale(4); // GROSSIR x4
     this.cursors = scene.input.keyboard.createCursorKeys();
     this.speed = 100;
   }
@@ -13,8 +13,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   update() {
     if (this.cursors.left.isDown) {
       this.setVelocityX(-this.speed);
+      this.setFlipX(true);
     } else if (this.cursors.right.isDown) {
       this.setVelocityX(this.speed);
+      this.setFlipX(false);
     } else {
       this.setVelocityX(0);
     }
