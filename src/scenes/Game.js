@@ -1,17 +1,32 @@
 import { Scene } from "phaser";
+import Unicorn from "../class/Unicorn";
+import Player from "../class/Player";
+import Confetti from "../class/Confetti";
 import { Projectile } from "../class/Projectile";
-import Player from "../player";
 
 export class Game extends Scene {
   constructor() {
     super("Game");
   }
 
-  preload() {
-    this.load.image("background-stars", "assets/background_stars.webp");
-  }
-
   create() {
+    this.player = new Player(this, 300, 300, "player");
+    this.unicorn = new Unicorn(this, 512, 384, "enemyA");
+
+    this.bullets = this.physics.add.group({
+      classType: Confetti,
+      runChildUpdate: true,
+      maxSize: -1,
+    });
+
+    this.player.bullets = this.bullets;
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      // this.scene.start("bullet");
+    });
     // Pour que l'image prenne toute l'écran
     const { width, height } = this.scale;
     const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
@@ -97,9 +112,10 @@ export class Game extends Scene {
     }
   }
 
-  update() {
+  update(time) {
+    this.player.update(this.cursors, time);
+    this.unicorn.update();
     // Mettre à jour le joueur
-    this.player.update();
 
     if (
       this.player.body.velocity.x !== 0 ||
