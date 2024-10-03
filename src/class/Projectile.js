@@ -7,7 +7,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.body.setAllowGravity(false);
-    this.speed = 300; // Vitesse du projectile
+    // this.speed = 9999; Vitesse du projectile
   }
 
   // Positionnement et direction du projectile
@@ -16,7 +16,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
     this.setActive(true);
     this.setVisible(true);
 
-    this.setVelocity(directionX * this.speed, directionY * this.speed);
+    // this.setVelocity(directionX * this.speed, directionY * this.speed);
   }
 
   update() {

@@ -6,7 +6,7 @@ class Unicorn extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
-
+    this.setScale(1.5);
     this.speed = 100;
 
     this.init();
