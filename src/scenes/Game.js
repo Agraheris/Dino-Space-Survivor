@@ -3,6 +3,7 @@ import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
 import { Projectile } from "../class/Projectile";
+import Star from "../class/Star";
 
 export class Game extends Scene {
   constructor() {
@@ -15,12 +16,6 @@ export class Game extends Scene {
     this.createPlayer();
     this.createEnemies();
     this.createInputHandlers();
-
-    // this.lives = 5;
-    // this.livesText = this.add.text(16, 64, "Lives: 5", {
-    //   fontSize: "48px",
-    //   fill: "#ffffff",
-    // });
 
     this.player.bullets = this.bullets;
 
@@ -35,6 +30,13 @@ export class Game extends Scene {
     const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
     background.setDisplaySize(width, height);
 
+    // Initialisation des vies du joueur
+    this.lives = 5;
+    this.livesText = this.add.text(16, 64, "Lives: 5", {
+      fontSize: "48px",
+      fill: "#ffffff",
+    });
+
     // Gérer plusieurs projectiles
     this.projectiles = this.physics.add.group({
       classType: Projectile,
@@ -48,7 +50,7 @@ export class Game extends Scene {
       this.player.play("walk");
     });
 
-    // Apparition des ennemis à projectiles
+    // Apparition des ennemis
     this.time.addEvent({
       delay: 5000, // 5 secondes
       callback: this.spawnEnemies,
@@ -64,7 +66,15 @@ export class Game extends Scene {
       loop: true, // Répéter l'événement
     });
 
-    // Gére les collisions entre les balles et les ennemis
+    // Apparition des étoiles
+    this.time.addEvent({
+      delay: 1000, // 1 secondes
+      callback: this.spawnStar,
+      callbackScope: this,
+      loop: true, // Répéter l'événement
+    });
+
+    // Gérer les collisions entre les balles et les ennemis
     this.physics.add.collider(
       this.bullets,
       this.enemyGroup,
@@ -72,14 +82,23 @@ export class Game extends Scene {
       null,
       this
     );
-    // Gére les collisions entre le joueur et les ennemis
-    // this.physics.add.collider(
-    //   this.player,
-    //   this.enemyGroup,
-    //   this.handlePlayerEnemyCollision,
-    //   null,
-    //   this
-    // );
+    // Gérer les collisions entre le joueur et les ennemis
+    this.physics.add.collider(
+      this.player,
+      this.enemyGroup,
+      this.handlePlayerEnemyCollision,
+      null,
+      this
+    );
+
+    // Gérer les collisions entre le joueur et les étoiles
+    this.physics.add.collider(
+      this.player,
+      this.star,
+      this.handlePlayerStarCollision,
+      null,
+      this
+    );
 
     // score
     this.score = 0;
@@ -111,6 +130,10 @@ export class Game extends Scene {
     });
     this.enemyGroup = this.physics.add.group();
     this.chasingEnemyGroup = this.physics.add.group();
+    this.stars = this.physics.add.group({
+      classType: Star,
+      runChildUpdate: true,
+    });
   }
 
   // Joueur
@@ -177,6 +200,15 @@ export class Game extends Scene {
     }
   }
 
+  spawnStar() {
+    const { width, height } = this.scale;
+
+    const randomX = Phaser.Math.Between(0, width);
+    const randomY = Phaser.Math.Between(0, height);
+
+    const star = new Star(this, randomX, randomY, "star");
+  }
+
   update(time) {
     this.player.update(this.cursors, time);
 
@@ -212,6 +244,36 @@ export class Game extends Scene {
 
     enemy.destroy();
     this.increaseScore();
+  }
+
+  handlePlayerEnemyCollision(player, enemy) {
+    // Réduire la vie du joueur
+    this.lives--;
+    this.livesText.setText("Lives: " + this.lives);
+
+    // Vérifie si le joueur a encore des vies
+    if (this.lives <= 0) {
+      this.scene.start("GameOver");
+    }
+
+    if (this.enemyGroup.contains(enemy)) {
+      if (enemy.shootEvent) {
+        enemy.shootEvent.remove();
+      }
+      enemy.destroy();
+    }
+  }
+
+  handlePlayerStarCollision(star) {
+    // Augmente le score du joueur
+    // this.score++;
+    // this.scoreText.setText("Score : " + this.score);
+    if (this.stars.contains(star)) {
+      if (star.shootEvent) {
+        star.shootEvent.remove();
+      }
+      star.destroy();
+    }
   }
 
   increaseScore(points) {
