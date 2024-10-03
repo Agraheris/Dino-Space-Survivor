@@ -8,6 +8,11 @@ export class Game extends Scene {
   }
 
   create() {
+    this.score = 0;
+    this.scoreText = this.add.text(16, 16, "Score: 0", {
+      fontSize: "48px",
+      fill: "#FFFFFF",
+    });
     this.cameras.main.setBackgroundColor(0x00ff00);
     this.add.image(512, 384, "background").setAlpha(0.5);
 
@@ -80,4 +85,9 @@ export class Game extends Scene {
       this.player.stop();
     }
   }
+}
+
+function shootSent(player) {
+  score += 10;
+  scoreText.setText("Score: " + score);
 }
