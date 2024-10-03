@@ -35,8 +35,12 @@ export class Preloader extends Scene {
 
     this.load.image("background-stars", "background_stars.webp");
 
-    this.load.image("player1", "triangle.png");
     this.load.image("bullet", "bullet-red.png");
+
+    this.load.spritesheet("bullets", "bullets.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
   create() {
     this.anims.create({

@@ -6,14 +6,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    this.setScale(4);
+    this.setScale(3.5);
 
-    this.speed = 500;
+    this.speed = 400;
 
-    this.fireRate = 500;
+    this.fireRate = 1000;
     this.lastFired = 0;
+    this.health = 100;
+    this.maxHealth = 100;
 
-    // this.direction = "right";
     this.init();
   }
 
@@ -21,6 +22,28 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true);
     this.setBounce(0.2);
   }
+
+  // takeDamage(amount) {
+  //   this.health -= amount;
+  //   if (this.health <= 0) {
+  //     this.health = 0;
+  //     this.die();
+  //   }
+  //   this.scene.updateHealthBar();
+  // }
+
+  // heal(amount) {
+  //   this.health += amount;
+  //   if (this.health > this.maxHealth) {
+  //     this.health = this.maxHealth;
+  //   }
+  //   this.scene.updateHealthBar();
+  // }
+
+  // die() {
+  //   this.setTint(0xff0000);
+  //   this.setVelocity(0, 0);
+  // }
 
   update(cursors, time) {
     this.setVelocity(0);
@@ -59,6 +82,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.shootConfetti();
       this.lastFired = time + this.fireRate;
     }
+    // this.updateHealthBar();
   }
   shootConfetti() {
     const bullet = this.scene.bullets.get(this.x, this.y);
