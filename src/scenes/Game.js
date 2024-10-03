@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
 import { Projectile } from "../class/Projectile";
@@ -7,12 +8,52 @@ export class Game extends Scene {
   constructor() {
     super("Game");
   }
+
   create() {
+<<<<<<< HEAD
     this.createBackground();
     this.initializeGroups();
     this.createPlayer();
     this.createEnemies();
     this.createInputHandlers();
+=======
+    this.player = new Player(this, 300, 300, "player");
+    this.unicorn = new Unicorn(this, 512, 384, "enemyA");
+
+    this.bullets = this.physics.add.group({
+      classType: Confetti,
+      runChildUpdate: true,
+      maxSize: -1,
+    });
+
+    this.player.bullets = this.bullets;
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      // this.scene.start("bullet");
+    });
+    // Pour que l'image prenne toute l'écran
+    const { width, height } = this.scale;
+    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
+    background.setDisplaySize(width, height);
+
+    // Gérer plusieurs projectiles
+    this.projectiles = this.physics.add.group({
+      classType: Projectile,
+      runChildUpdate: true, // Met à jour les projectiles avec Update
+    });
+
+    this.enemyGroup = this.physics.add.group();
+
+    // Initialiser le joueur
+    this.player = new Player(this, 400, 300, "player");
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      this.player.play("walk");
+    });
+>>>>>>> main
 
     // Réapparition des ennemis à intervalles réguliers
     this.time.addEvent({
@@ -98,6 +139,10 @@ export class Game extends Scene {
   update(time) {
     this.player.update(this.cursors, time);
     this.unicorn.update();
+<<<<<<< HEAD
+=======
+    // Mettre à jour le joueur
+>>>>>>> main
 
     if (
       this.player.body.velocity.x !== 0 ||
