@@ -1,28 +1,31 @@
-import { Scene } from 'phaser';
+import { Scene } from "phaser";
+import Player from "../player";
 
-export class Game extends Scene
-{
-    constructor ()
-    {
-        super('Game');
+export class Game extends Scene {
+  constructor() {
+    super("Game");
+  }
+
+  create() {
+    this.player = new Player(this, 400, 300, "player");
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      this.player.play("walk");
+    });
+  }
+
+  update() {
+    this.player.update();
+
+    if (
+      this.player.body.velocity.x !== 0 ||
+      this.player.body.velocity.y !== 0
+    ) {
+      if (!this.player.anims.isPlaying) {
+        this.player.play("walk", true);
+      }
+    } else {
+      this.player.stop();
     }
-
-    create ()
-    {
-        this.cameras.main.setBackgroundColor(0x00ff00);
-
-        this.add.image(512, 384, 'background').setAlpha(0.5);
-
-        this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        this.input.once('pointerdown', () => {
-
-            this.scene.start('GameOver');
-
-        });
-    }
+  }
 }
