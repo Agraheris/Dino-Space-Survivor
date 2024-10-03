@@ -22,6 +22,32 @@ export class Game extends Scene {
     //   fill: "#ffffff",
     // });
 
+    this.player.bullets = this.bullets;
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      // this.scene.start("bullet");
+    });
+    // Pour que l'image prenne toute l'écran
+    const { width, height } = this.scale;
+    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
+    background.setDisplaySize(width, height);
+
+    // Gérer plusieurs projectiles
+    this.projectiles = this.physics.add.group({
+      classType: Projectile,
+      runChildUpdate: true, // Met à jour les projectiles avec Update
+    });
+
+    // Initialiser le joueur
+    this.player = new Player(this, 400, 300, "player");
+    this.input.once("pointerdown", () => {
+      this.scene.start("GameOver");
+      this.player.play("walk");
+    });
+
     // Apparition des ennemis à projectiles
     this.time.addEvent({
       delay: 5000, // 5 secondes
@@ -139,6 +165,7 @@ export class Game extends Scene {
     // Vitesse de l'ennemi qui poursuit le joueur
   }
 
+  // Tirer un projectile attiré vers le joueur
   shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
