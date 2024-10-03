@@ -7,7 +7,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.body.setAllowGravity(false);
-    this.speed = 100; // Vitesse du projectile
+    // this.speed = 100;
   }
 
   // Positionnement et direction du projectile
