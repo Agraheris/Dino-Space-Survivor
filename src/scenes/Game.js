@@ -32,7 +32,7 @@ export class Game extends Scene {
       this.player.play("walk");
     });
 
-    // Réapparition des ennemis
+    // Réapparition des ennemis à intervalles réguliers
     this.time.addEvent({
       delay: 5000, // 5 secondes
       callback: this.spawnEnemies,
@@ -45,44 +45,29 @@ export class Game extends Scene {
   spawnEnemies() {
     const { width, height } = this.scale;
 
+    // Position aléatoire pour l'ennemi
     const randomX = Phaser.Math.Between(0, width);
     const randomY = Phaser.Math.Between(0, height);
-
-    const directions = [
-      [-1, 0], // Tire à gauche
-      [1, 0], // Tire à droite
-      [0, -1], // Tire vers le haut
-      [0, 1], // Tire vers le bas
-      [-1, -1], // Diagonale haut-gauche
-      [1, 1], // Diagonale bas-droite
-    ];
-
     const enemy = this.enemyGroup.create(randomX, randomY, "enemy");
 
-    // Tirer dans la direction aléatoire
-    const randomIndex = Phaser.Math.Between(0, directions.length - 1);
-    const randomDirection = directions[randomIndex];
-
-    // Configuration Ennemis
+    // Tirer en direction du joueur toutes les 2 secondes
     this.time.addEvent({
       delay: 2000, // Tir toutes les 2 secondes
       callback: () => {
-        this.shootProjectileFromEnemy(
-          enemy,
-          randomDirection[0],
-          randomDirection[1]
-        );
+        this.shootProjectileToPlayer(enemy);
       },
       callbackScope: this,
       loop: true, // Répéter l'événement
     });
   }
 
-  // Direction du tir
-  shootProjectileFromEnemy(enemy, directionX, directionY) {
+  // Tirer un projectile attiré vers le joueur
+  shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
-      projectile.shoot(enemy.x, enemy.y, directionX, directionY); // Lance le projectile
+      projectile.setPosition(enemy.x, enemy.y);
+      this.physics.moveToObject(projectile, this.player, 300);
+      // 300 est la vitesse du projectile
     }
   }
 
