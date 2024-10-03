@@ -8,7 +8,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     this.setScale(4);
 
-    this.speed = 100;
+    this.speed = 500;
 
     this.fireRate = 500;
     this.lastFired = 0;

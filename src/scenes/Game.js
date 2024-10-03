@@ -38,8 +38,6 @@ export class Game extends Scene {
       runChildUpdate: true, // Met à jour les projectiles avec Update
     });
 
-    this.enemyGroup = this.physics.add.group();
-
     // Initialiser le joueur
     this.player = new Player(this, 400, 300, "player");
     this.input.once("pointerdown", () => {
@@ -47,16 +45,27 @@ export class Game extends Scene {
       this.player.play("walk");
     });
 
-    // Réapparition des ennemis à intervalles réguliers
+    // Apparition des ennemis à projectiles
     this.time.addEvent({
       delay: 5000, // 5 secondes
       callback: this.spawnEnemies,
       callbackScope: this,
       loop: true, // Répéter l'événement
     });
+
+    // Apparition des ennemis qui vont vers le joueur
+    this.time.addEvent({
+      delay: 7000, // 7 secondes
+      callback: this.spawnChasingEnemy,
+      callbackScope: this,
+      loop: true, // Répéter l'événement
+    });
+
+    this.enemyGroup = this.physics.add.group();
+    this.chasingEnemyGroup = this.physics.add.group();
   }
 
-  // Créer de nouveaux ennemis
+  // Créer des ennemis à projectiles
   spawnEnemies() {
     const { width, height } = this.scale;
 
@@ -65,9 +74,9 @@ export class Game extends Scene {
     const randomY = Phaser.Math.Between(0, height);
     const enemy = this.enemyGroup.create(randomX, randomY, "enemy");
 
-    // Tirer en direction du joueur toutes les 2 secondes
+    // Tirer en direction du joueur
     this.time.addEvent({
-      delay: 2000, // Tir toutes les 2 secondes
+      delay: 10000, // Tir toutes les 10 secondes
       callback: () => {
         this.shootProjectileToPlayer(enemy);
       },
@@ -76,13 +85,30 @@ export class Game extends Scene {
     });
   }
 
+  //  Créer des ennemis qui poursuit le joueur
+  spawnChasingEnemy() {
+    const { width, height } = this.scale;
+
+    // Position aléatoire pour l'ennemi
+    const randomX = Phaser.Math.Between(0, width);
+    const randomY = Phaser.Math.Between(0, height);
+    const chasingEnemy = this.chasingEnemyGroup.create(
+      randomX,
+      randomY,
+      "chasing-enemy"
+    );
+
+    this.physics.moveToObject(chasingEnemy, this.player, 50);
+    // Vitesse de l'ennemi qui poursuit le joueur
+  }
+
   // Tirer un projectile attiré vers le joueur
   shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
       projectile.setPosition(enemy.x, enemy.y);
-      this.physics.moveToObject(projectile, this.player, 300);
-      // 300 est la vitesse du projectile
+      this.physics.moveToObject(projectile, this.player, 100);
+      // Vitesse du projectile
     }
   }
 
@@ -101,5 +127,10 @@ export class Game extends Scene {
     } else {
       this.player.stop();
     }
+
+    this.chasingEnemyGroup.children.iterate((chasingEnemy) => {
+      this.physics.moveToObject(chasingEnemy, this.player, 50);
+      // Vitesse de l'ennemi qui va vers le joueur
+    });
   }
 }
