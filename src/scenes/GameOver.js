@@ -5,6 +5,10 @@ export class GameOver extends Scene {
     super("GameOver");
   }
 
+  init(data) {
+    this.score = data.score;
+  }
+
   create() {
     this.cameras.main.setBackgroundColor(0xff0000);
 
@@ -19,7 +23,16 @@ export class GameOver extends Scene {
         align: "center",
       })
       .setOrigin(0.5);
-
+    this.add
+      .text(512, 484, `Score : ${this.score}`, {
+        fontFamily: "Arial Black",
+        fontSize: 64,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 8,
+        align: "center",
+      })
+      .setOrigin(0.5);
     this.input.once("pointerdown", () => {
       this.scene.start("MainMenu");
     });
