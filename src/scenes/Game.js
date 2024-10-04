@@ -35,15 +35,6 @@ export class Game extends Scene {
       loop: true, // Répéter l'événement
     });
 
-    // Gérer les collisions entre le joueur et les projectiles
-    this.physics.add.collider(
-      this.player,
-      this.projectiles,
-      this.handlePlayerProjectileCollision,
-      null,
-      this
-    );
-
     // Apparition des étoiles
     this.time.addEvent({
       delay: 12000, // 1 secondes
@@ -121,15 +112,38 @@ export class Game extends Scene {
   createTextDisplays() {
     // vies
     this.lives = 5;
-    this.livesText = this.add.text(16, 64, "Lives: 5", {
-      fontSize: "48px",
-      fill: "#ffffff",
+
+    const barConfig = {
+      width: 200,
+      height: 20,
+      maxHealth: 5,
+      padding: 2
+    };
+    this.healthBar = this.add.group();
+    for (let i = 0; i < barConfig.maxHealth; i++) {
+      const x = i * (barConfig.width / barConfig.maxHealth + barConfig.padding);
+      const healthSquare = this.add.rectangle(x, 0, barConfig.width / barConfig.maxHealth, barConfig.height, 0x00ff00);
+      this.healthBar.add(healthSquare);
+    }
+
+    this.healthBar.getChildren().forEach((healthSquare, index) => {
+      healthSquare.setPosition(10 + index * (barConfig.width / barConfig.maxHealth + barConfig.padding), 10);
     });
     // score
     this.score = 0;
     this.scoreText = this.add.text(16, 16, "Score: 0", {
       fontSize: "48px",
       fill: "#ffffff",
+    });
+  }
+
+  updateHealthBar() {
+    this.healthBar.getChildren().forEach((square, index) => {
+      if (index < this.lives) {
+        square.fillColor = 0x00ff00; // Vert pour la vie restante
+      } else {
+        square.fillColor = 0xff0000; // Rouge pour la vie perdue
+      }
     });
   }
 
@@ -159,7 +173,7 @@ export class Game extends Scene {
 
     const randomX = Phaser.Math.Between(0, width);
     const randomY = Phaser.Math.Between(0, height);
-    const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyB");
+    const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyA");
 
     this.physics.moveToObject(chasingEnemy, this.player, 50);
   }
@@ -167,7 +181,7 @@ export class Game extends Scene {
   shootProjectileToPlayer(enemy) {
     const projectile = this.projectiles.get();
     if (projectile) {
-      projectile.setTexture("enemyC");
+      projectile.setTexture("bullets");
       projectile.setFrame(24);
       projectile.setPosition(enemy.x, enemy.y);
       this.physics.moveToObject(projectile, this.player, 100);
@@ -182,17 +196,11 @@ export class Game extends Scene {
 
     const star = new Star(this, randomX, randomY, "star");
     this.star.add(star);
-    this.time.delayedCall(
-      5000,
-      () => {
-        if (star && star.active) {
-          // Vérifie si l'étoile existe toujours
-          star.destroy();
-        }
-      },
-      [],
-      this
-    );
+    this.time.delayedCall(5000, () => {
+      if (star && star.active) { // Vérifie si l'étoile existe toujours
+        star.destroy();
+      }
+    }, [], this);
   }
 
   update(time) {
@@ -232,19 +240,14 @@ export class Game extends Scene {
     this.increaseScore();
   }
 
-  increaseScore(points) {
-    this.score += 10;
-    this.scoreText.setText("Score : " + this.score);
-  }
-
   handlePlayerEnemyCollision(player, enemy) {
     // Réduire la vie du joueur
     this.lives--;
-    this.livesText.setText("Lives: " + this.lives);
+    this.updateHealthBar();
 
     // Vérifie si le joueur a encore des vies
     if (this.lives <= 0) {
-      this.scene.start("GameOver", { score: this.score });
+      this.scene.start("GameOver");
     }
 
     if (this.enemyGroup.contains(enemy)) {
@@ -255,24 +258,15 @@ export class Game extends Scene {
     }
   }
 
-  handlePlayerProjectileCollision(player, projectile) {
-    // Réduire la vie du joueur
-    this.lives--;
-    this.livesText.setText("Lives: " + this.lives);
-
-    // Vérifier si le joueur a encore des vies
-    if (this.lives <= 0) {
-      this.scene.start("GameOver");
-    }
-
-    // Détruire le projectile après la collision
-    projectile.destroy();
+  handlePlayerStarCollision(player, star) {  
+    console.info("étoile")
+    this.score += 50;
+    this.scoreText.setText("Score : " + this.score);
+      star.destroy();
   }
 
-  handlePlayerStarCollision(player, star) {
-    console.info("étoile");
+  increaseScore(points) {
     this.score += 10;
     this.scoreText.setText("Score : " + this.score);
-    star.destroy();
   }
 }
