@@ -123,9 +123,7 @@ export class Game extends Scene {
       },
     });
 
-    // Groupe pour les power-ups
     this.powerUps = this.physics.add.group();
-
     this.enemyGroup = this.physics.add.group();
     this.chasingEnemyGroup = this.physics.add.group();
     this.star = this.physics.add.group({
