@@ -20,6 +20,8 @@ export class GameOver extends Scene {
     background.setPosition(centerX, centerY);
   }
 
+  // ajout d'un commentaire à effacer.
+
   create() {
     this.cameras.main.setBackgroundColor(0x1d061f);
     this.createBackground();
