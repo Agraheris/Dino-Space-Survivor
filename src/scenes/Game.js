@@ -3,6 +3,7 @@ import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
 import Ahriman from "../class/Ahriman";
+import Shroom from "../class/Shroom";
 import { Projectile } from "../class/Projectile";
 import Star from "../class/Star";
 
@@ -250,9 +251,11 @@ export class Game extends Scene {
 
     const randomX = Phaser.Math.Between(0, width);
     const randomY = Phaser.Math.Between(0, height);
-    const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyB");
+    const shroom = new Shroom(this, randomX, randomY, "shroom");
+    this.enemyGroup.add(shroom);
+    shroom.play("run");
 
-    this.physics.moveToObject(chasingEnemy, this.player, 50);
+    this.physics.moveToObject(shroom, this.player, 50);
   }
 
   spawnAhriman() {
@@ -271,8 +274,10 @@ export class Game extends Scene {
     const projectile = this.projectiles.get();
     if (projectile) {
       projectile.setTexture("enemyC");
-      projectile.setFrame(24);
+      projectile.setScale(2);
       projectile.setPosition(enemy.x, enemy.y);
+      projectile.body.setSize(14, 14);
+      projectile.play("fire");
       this.physics.moveToObject(projectile, this.player, 100);
     }
   }
