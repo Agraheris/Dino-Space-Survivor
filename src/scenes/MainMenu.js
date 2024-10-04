@@ -6,8 +6,6 @@ export class MainMenu extends Scene {
   }
 
   create() {
-
-
     this.add.image(512, 300, "logo");
 
     this.add
