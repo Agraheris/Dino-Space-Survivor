@@ -54,7 +54,7 @@ export class Game extends Scene {
 
     // Apparition du power-up "coup_de_feu"
     this.time.addEvent({
-      delay: 30000, // 30 secondes
+      delay: 15000, // 15 secondes
       callback: this.spawnPowerUp,
       callbackScope: this,
       loop: true, // Répéter l'événement
