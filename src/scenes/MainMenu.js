@@ -5,13 +5,24 @@ export class MainMenu extends Scene {
     super("MainMenu");
   }
 
+  // Background
+  createBackground() {
+    const background = this.add.image(0, 0, "logo").setOrigin(0.5);
+    const scaleX = 0.5 * (this.scale.width / background.width);
+    const scaleY = 0.6 * (this.scale.height / background.height);
+    background.setScale(scaleX, scaleY);
+
+    const centerX = this.scale.width / 2;
+    const topY = 250;
+
+    background.setPosition(centerX, topY);
+  }
+
   create() {
-
-
-    this.add.image(512, 300, "logo");
-
+    this.cameras.main.setBackgroundColor(0x181a27);
+    this.createBackground();
     this.add
-      .text(512, 460, "DinoSpace survivor", {
+      .text(512, 560, "DinoSpace survivor", {
         fontFamily: "Arial Black",
         fontSize: 38,
         color: "#ffffff",
@@ -22,7 +33,7 @@ export class MainMenu extends Scene {
       .setOrigin(0.5);
 
     this.add
-      .text(512, 560, "*** Click and START ***", {
+      .text(512, 660, "*** Click and START ***", {
         fontFamily: "Arial Black",
         fontSize: 38,
         color: "#ffffff",
