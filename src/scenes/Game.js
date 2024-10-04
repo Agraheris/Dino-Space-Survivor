@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
+import Ahriman from "../class/Ahriman";
 import { Projectile } from "../class/Projectile";
 import Star from "../class/Star";
 
@@ -31,6 +32,14 @@ export class Game extends Scene {
     this.time.addEvent({
       delay: 7000, // 7 secondes
       callback: this.spawnChasingEnemy,
+      callbackScope: this,
+      loop: true, // Répéter l'événement
+    });
+
+    // Apparition des ennemis
+    this.time.addEvent({
+      delay: 3000, // 5 secondes
+      callback: this.spawnAhriman,
       callbackScope: this,
       loop: true, // Répéter l'événement
     });
@@ -102,6 +111,10 @@ export class Game extends Scene {
     this.chasingEnemyGroup = this.physics.add.group();
     this.star = this.physics.add.group({
       classType: Star,
+      runChildUpdate: true,
+    });
+    this.ahriman = this.physics.add.group({
+      classType: Ahriman,
       runChildUpdate: true,
     });
   }
@@ -195,6 +208,18 @@ export class Game extends Scene {
     const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyB");
 
     this.physics.moveToObject(chasingEnemy, this.player, 50);
+  }
+
+  spawnAhriman() {
+    const { width, height } = this.scale;
+
+    const randomX = Phaser.Math.Between(0, width);
+    const randomY = Phaser.Math.Between(0, height);
+    const ahriman = new Ahriman(this, randomX, randomY, "ahriman");
+    this.enemyGroup.add(ahriman);
+    ahriman.play("fly");
+
+    this.physics.moveToObject(ahriman, this.player, 80);
   }
 
   shootProjectileToPlayer(enemy) {
