@@ -27,8 +27,14 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
     this.load.image("logo", "logo.png");
     this.load.image("enemyA", "enemy.png");
-    this.load.image("enemyB", "crown.png");
-    this.load.image("enemyC", "china.png");
+    this.load.spritesheet("shroom", "shroom.png", {
+      frameWidth: 150,
+      frameHeight: 150,
+    });
+    this.load.spritesheet("enemyC", "china.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
     this.load.spritesheet("ahriman", "ahriman-flight.png", {
       frameWidth: 150,
       frameHeight: 150,
@@ -51,8 +57,6 @@ export class Preloader extends Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
-
-
   }
   create() {
     this.anims.create({
@@ -65,6 +69,18 @@ export class Preloader extends Scene {
       key: "fly",
       frames: this.anims.generateFrameNumbers("ahriman", { start: 0, end: 7 }),
       frameRate: 16,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "run",
+      frames: this.anims.generateFrameNumbers("shroom", { start: 0, end: 7 }),
+      frameRate: 16,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: "fire",
+      frames: this.anims.generateFrameNumbers("enemyC", { start: 15, end: 16 }),
+      frameRate: 8,
       repeat: -1,
     });
 
