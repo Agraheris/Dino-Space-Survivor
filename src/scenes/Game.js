@@ -11,8 +11,15 @@ export class Game extends Scene {
     super("Game");
   }
 
+  preload() {
+    // Charger la vidéo dans le préchargement de la scène
+    this.load.video("galaxy", "assets/galaxy.webm", "loadeddata", false, true);
+  }
+
   create() {
-    this.createBackground();
+    // Ajout de la vidéo en tant que fond d'écran
+    this.createBackgroundVideo();
+
     this.initializeGroups();
     this.createPlayer();
     this.createInputHandlers();
@@ -87,11 +94,14 @@ export class Game extends Scene {
       this
     );
   }
-  // Background
-  createBackground() {
-    const { width, height } = this.scale;
-    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
-    background.setDisplaySize(width, height);
+
+  // Méthode pour créer et afficher la vidéo en arrière-plan
+  createBackgroundVideo() {
+    const video = this.add.video(0, 0, "galaxy");
+    video.setOrigin(0, 0);
+    video.setDisplaySize(this.scale.width, this.scale.height);
+    video.setDepth(-1);
+    video.play(true);
   }
 
   initializeGroups() {
@@ -139,33 +149,33 @@ export class Game extends Scene {
       width: 200,
       height: 20,
       maxHealth: 5,
-      padding: 2
+      padding: 2,
     };
     this.healthBar = this.add.group();
     for (let i = 0; i < barConfig.maxHealth; i++) {
       const x = i * (barConfig.width / barConfig.maxHealth + barConfig.padding);
-      const healthSquare = this.add.rectangle(x, 0, barConfig.width / barConfig.maxHealth, barConfig.height, 0x00ff00);
+      const healthSquare = this.add.rectangle(
+        x,
+        0,
+        barConfig.width / barConfig.maxHealth,
+        barConfig.height,
+        0x00ff00
+      );
       this.healthBar.add(healthSquare);
     }
 
     this.healthBar.getChildren().forEach((healthSquare, index) => {
-      healthSquare.setPosition(10 + index * (barConfig.width / barConfig.maxHealth + barConfig.padding), 10);
+      healthSquare.setPosition(
+        10 +
+          index * (barConfig.width / barConfig.maxHealth + barConfig.padding),
+        10
+      );
     });
     // score
     this.score = 0;
     this.scoreText = this.add.text(16, 16, "Score: 0", {
       fontSize: "48px",
       fill: "#ffffff",
-    });
-  }
-
-  updateHealthBar() {
-    this.healthBar.getChildren().forEach((square, index) => {
-      if (index < this.lives) {
-        square.fillColor = 0x00ff00; // Vert pour la vie restante
-      } else {
-        square.fillColor = 0xff0000; // Rouge pour la vie perdue
-      }
     });
   }
 
