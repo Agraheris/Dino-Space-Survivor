@@ -40,6 +40,8 @@ export class Preloader extends Scene {
     });
 
     this.load.image("background-stars", "background_stars.webp");
+    this.load.audio("gameOverMusic", "Bim_erreur.wav");
+    this.load.audio("menuStarMusic", "Cest_parti.wav");
 
     this.load.image("bullet", "bullet-red.png");
 

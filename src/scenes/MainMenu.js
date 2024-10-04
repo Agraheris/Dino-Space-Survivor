@@ -5,6 +5,8 @@ export class MainMenu extends Scene {
     super("MainMenu");
   }
 
+
+  create() {
   // Background
   createBackground() {
     const background = this.add.image(0, 0, "logo").setOrigin(0.5);

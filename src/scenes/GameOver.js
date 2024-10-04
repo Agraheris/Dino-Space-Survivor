@@ -26,6 +26,11 @@ export class GameOver extends Scene {
     this.cameras.main.setBackgroundColor(0x1d061f);
     this.createBackground();
 
+    const gameOverMusic = this.sound.add("gameOverMusic", { loop: false });
+    if (gameOverMusic) {
+      gameOverMusic.play();
+    }
+
     this.add
       .text(512, 384, "Game Over", {
         fontFamily: "Arial Black",
