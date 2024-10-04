@@ -42,8 +42,10 @@ export class MainMenu extends Scene {
         align: "center",
       })
       .setOrigin(0.5);
+    this.menuStartMusic = this.sound.add("menuStartMusic", { loop: false });
 
     this.input.once("pointerdown", () => {
+      this.menuStartMusic.play();
       this.scene.start("Game");
     });
   }
