@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import Unicorn from "../class/Unicorn";
 import Player from "../class/Player";
 import Confetti from "../class/Confetti";
+import Ahriman from "../class/Ahriman";
 import { Projectile } from "../class/Projectile";
 import Star from "../class/Star";
 
@@ -10,8 +11,15 @@ export class Game extends Scene {
     super("Game");
   }
 
+  preload() {
+    // Charger la vidéo dans le préchargement de la scène
+    this.load.video("galaxy", "assets/galaxy.webm", "loadeddata", false, true);
+  }
+
   create() {
-    this.createBackground();
+    // Ajout de la vidéo en tant que fond d'écran
+    this.createBackgroundVideo();
+
     this.initializeGroups();
     this.createPlayer();
     this.createInputHandlers();
@@ -31,6 +39,14 @@ export class Game extends Scene {
     this.time.addEvent({
       delay: 7000, // 7 secondes
       callback: this.spawnChasingEnemy,
+      callbackScope: this,
+      loop: true, // Répéter l'événement
+    });
+
+    // Apparition des ennemis
+    this.time.addEvent({
+      delay: 3000, // 5 secondes
+      callback: this.spawnAhriman,
       callbackScope: this,
       loop: true, // Répéter l'événement
     });
@@ -78,11 +94,14 @@ export class Game extends Scene {
       this
     );
   }
-  // Background
-  createBackground() {
-    const { width, height } = this.scale;
-    const background = this.add.image(0, 0, "background-stars").setOrigin(0, 0);
-    background.setDisplaySize(width, height);
+
+  // Méthode pour créer et afficher la vidéo en arrière-plan
+  createBackgroundVideo() {
+    const video = this.add.video(0, 0, "galaxy");
+    video.setOrigin(0, 0);
+    video.setDisplaySize(this.scale.width, this.scale.height);
+    video.setDepth(-1);
+    video.play(true);
   }
 
   initializeGroups() {
@@ -104,6 +123,10 @@ export class Game extends Scene {
       classType: Star,
       runChildUpdate: true,
     });
+    this.ahriman = this.physics.add.group({
+      classType: Ahriman,
+      runChildUpdate: true,
+    });
   }
 
   createPlayer() {
@@ -121,15 +144,48 @@ export class Game extends Scene {
   createTextDisplays() {
     // vies
     this.lives = 5;
-    this.livesText = this.add.text(16, 64, "Lives: 5", {
-      fontSize: "48px",
-      fill: "#ffffff",
+
+    const barConfig = {
+      width: 200,
+      height: 20,
+      maxHealth: 5,
+      padding: 2,
+    };
+    this.healthBar = this.add.group();
+    for (let i = 0; i < barConfig.maxHealth; i++) {
+      const x = i * (barConfig.width / barConfig.maxHealth + barConfig.padding);
+      const healthSquare = this.add.rectangle(
+        x,
+        0,
+        barConfig.width / barConfig.maxHealth,
+        barConfig.height,
+        0x00ff00
+      );
+      this.healthBar.add(healthSquare);
+    }
+
+    this.healthBar.getChildren().forEach((healthSquare, index) => {
+      healthSquare.setPosition(
+        10 +
+          index * (barConfig.width / barConfig.maxHealth + barConfig.padding),
+        10
+      );
     });
     // score
     this.score = 0;
     this.scoreText = this.add.text(16, 16, "Score: 0", {
       fontSize: "48px",
       fill: "#ffffff",
+    });
+  }
+
+  updateHealthBar() {
+    this.healthBar.getChildren().forEach((square, index) => {
+      if (index < this.lives) {
+        square.fillColor = 0x00ff00; // Vert pour la vie restante
+      } else {
+        square.fillColor = 0xff0000; // Rouge pour la vie perdue
+      }
     });
   }
 
@@ -162,6 +218,18 @@ export class Game extends Scene {
     const chasingEnemy = this.enemyGroup.create(randomX, randomY, "enemyB");
 
     this.physics.moveToObject(chasingEnemy, this.player, 50);
+  }
+
+  spawnAhriman() {
+    const { width, height } = this.scale;
+
+    const randomX = Phaser.Math.Between(0, width);
+    const randomY = Phaser.Math.Between(0, height);
+    const ahriman = new Ahriman(this, randomX, randomY, "ahriman");
+    this.enemyGroup.add(ahriman);
+    ahriman.play("fly");
+
+    this.physics.moveToObject(ahriman, this.player, 80);
   }
 
   shootProjectileToPlayer(enemy) {
@@ -240,7 +308,7 @@ export class Game extends Scene {
   handlePlayerEnemyCollision(player, enemy) {
     // Réduire la vie du joueur
     this.lives--;
-    this.livesText.setText("Lives: " + this.lives);
+    this.updateHealthBar();
 
     // Vérifie si le joueur a encore des vies
     if (this.lives <= 0) {
@@ -258,7 +326,7 @@ export class Game extends Scene {
   handlePlayerProjectileCollision(player, projectile) {
     // Réduire la vie du joueur
     this.lives--;
-    this.livesText.setText("Lives: " + this.lives);
+    this.updateHealthBar();
 
     // Vérifier si le joueur a encore des vies
     if (this.lives <= 0) {
