@@ -5,10 +5,15 @@ import Confetti from "../class/Confetti";
 import Ahriman from "../class/Ahriman";
 import { Projectile } from "../class/Projectile";
 import Star from "../class/Star";
+import Boss from "../class/Boss";
 
 export class Game extends Scene {
   constructor() {
     super("Game");
+    this.bossGroup;
+    this.bossSpawnTime = 60000; // 5 minutes en millisecondes
+    this.lastBossSpawnTime = 0;
+    this.isBossActive = false;
   }
 
   preload() {
@@ -26,6 +31,7 @@ export class Game extends Scene {
     this.createTextDisplays();
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    
 
     // Apparition des ennemis
     this.time.addEvent({
@@ -66,6 +72,14 @@ export class Game extends Scene {
       callback: this.spawnStar,
       callbackScope: this,
       loop: true, // Répéter l'événement
+    });
+    
+      // Apparition du boss à intervalles définis
+    this.time.addEvent({
+      delay: this.bossSpawnTime, 
+      callback: this.spawnBoss,
+      callbackScope: this,
+      loop: true, // Répéter l'événement pour un boss périodique
     });
 
     // Gérer les collisions entre les balles et les ennemis
@@ -125,6 +139,10 @@ export class Game extends Scene {
     });
     this.ahriman = this.physics.add.group({
       classType: Ahriman,
+      runChildUpdate: true,
+    });
+    this.bossGroup = this.physics.add.group({
+      classType: Boss,
       runChildUpdate: true,
     });
   }
@@ -262,7 +280,26 @@ export class Game extends Scene {
       this
     );
   }
+    
 
+  spawnBoss() {
+    if (!this.isBossActive) {
+      const { width, height } = this.scale;
+      const boss = new Boss(this, width / 2, height / 2, 'boss');
+
+      
+      // Ajout du boss
+      this.bossGroup.add(boss);
+  
+      // Collision directe avec l'instance du boss
+      this.physics.add.collider(this.player, this.boss, this.handlePlayerBossCollision, null, this);
+      this.physics.add.collider(this.bullets, this.bossGroup, this.handleBossBulletCollision, null, this);
+      boss.setCollideWorldBounds(true); // Le boss ne sortira pas des limites
+      boss.setImmovable(true); // Le boss ne se déplacera pas lorsqu'il est touché
+  
+      this.isBossActive = true;
+    }
+  }
   update(time) {
     this.player.update(this.cursors, time);
 
@@ -285,6 +322,17 @@ export class Game extends Scene {
       this.physics.moveToObject(chasingEnemy, this.player, 50);
       // Vitesse de l'ennemi qui va vers le joueur
     });
+    
+    this.enemyGroup.getChildren().forEach((enemy) => {
+      if (enemy.active) {
+        const speedMultiplier = this.isBossActive ? 1 : 2; // Augmenter la vitesse après la défaite du boss
+        this.physics.moveToObject(enemy, this.player, 50 * speedMultiplier);
+      }
+    });
+    
+    if (this.isBossActive) {
+      this.bossGroup.getChildren()[0].update();
+    }
   }
 
   handleEnemyhit(bullet, enemy) {
@@ -338,9 +386,47 @@ export class Game extends Scene {
   }
 
   handlePlayerStarCollision(player, star) {
-    console.info("étoile");
     this.score += 10;
-    this.scoreText.setText("Score : " + this.score);
     star.destroy();
   }
+  handlePlayerBossCollision(player, boss) {
+    // Réduire la vie du joueur
+    this.lives--;
+    this.updateHealthBar();
+    if (this.lives <= 0) {
+      this.scene.start("GameOver", { score: this.score });
+    }
+  }
+  handleBossBulletCollision(bullet, boss) {
+    // Détruire la balle
+    bullet.destroy();
+    
+    // Assurez-vous que boss est une instance de Boss
+    if (boss instanceof Boss) {
+      if (boss.takeDamage()) {
+        this.isBossActive = false;
+        this.powerUpEnemies();
+        this.score += 50;
+
+      }
+    } else {
+      console.error("Erreur : collision détectée avec un objet autre que Boss", boss);
+    }
+  }
+  powerUpEnemies() {
+    this.enemyGroup.getChildren().forEach((enemy) => {
+        if (enemy.active) {
+            // Obtenez la vitesse actuelle de l'ennemi
+            const currentVelocityX = enemy.body.velocity.x;
+            const currentVelocityY = enemy.body.velocity.y;
+
+            // Calculez le facteur de mise à l'échelle pour augmenter la vitesse de 50 unités en maintenant la direction
+            const scaleFactor = (Phaser.Math.Distance.Between(0, 0, currentVelocityX, currentVelocityY) + 50) / Phaser.Math.Distance.Between(0, 0, currentVelocityX, currentVelocityY);
+
+            // Appliquez le facteur d'augmentation de vitesse
+            enemy.setVelocity(currentVelocityX * scaleFactor, currentVelocityY * scaleFactor);
+        }
+    });
+}
+
 }

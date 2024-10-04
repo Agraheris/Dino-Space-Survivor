@@ -33,7 +33,8 @@ export class Preloader extends Scene {
       frameWidth: 150,
       frameHeight: 150,
     });
-
+    this.load.image("boss", "snowman.png");
+    
     this.load.spritesheet("player", "DinoSprites-red.png", {
       frameWidth: 24,
       frameHeight: 24,
