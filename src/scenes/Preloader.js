@@ -30,6 +30,10 @@ export class Preloader extends Scene {
     this.load.image("enemyB", "crown.png");
     this.load.image("enemyC", "china.png");
     this.load.image("coup_de_feu", "coup_de_feu.png");
+    this.load.spritesheet("ahriman", "ahriman-flight.png", {
+      frameWidth: 150,
+      frameHeight: 150,
+    });
 
     this.load.spritesheet("player", "DinoSprites-red.png", {
       frameWidth: 24,
@@ -37,10 +41,14 @@ export class Preloader extends Scene {
     });
 
     this.load.image("background-stars", "background_stars.webp");
+    this.load.audio("gameOverMusic", "Bim_erreur.wav");
+    this.load.audio("menuStarMusic", "Cest_parti.wav");
 
     this.load.image("bullet", "bullet-red.png");
 
     this.load.image("star", "star.png");
+
+    this.load.image("skull", "skull.svg");
 
     this.load.spritesheet("bullets", "bullets.png", {
       frameWidth: 16,
@@ -54,12 +62,13 @@ export class Preloader extends Scene {
       frameRate: 16,
       repeat: -1,
     });
+    this.anims.create({
+      key: "fly",
+      frames: this.anims.generateFrameNumbers("ahriman", { start: 0, end: 7 }),
+      frameRate: 16,
+      repeat: -1,
+    });
 
     this.scene.start("MainMenu");
-    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.load.spritesheet("player", "DinoSprites.png", {
-      frameHeight: 24,
-      frameWidth: 24,
-    });
   }
 }
