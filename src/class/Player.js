@@ -15,6 +15,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.health = 100;
     this.maxHealth = 100;
 
+  // Ajuste la taille et la position de la hitbox
+    this.body.setSize(15,15);
+    this.body.setOffset(5,5)
+
     this.init();
   }
 
