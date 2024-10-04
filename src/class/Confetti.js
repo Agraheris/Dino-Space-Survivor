@@ -10,7 +10,7 @@ class Confetti extends Phaser.Physics.Arcade.Sprite {
 
     // Ajuste la taille et la position de la hitbox
     this.body.setSize(35, 25); // Remplace la largeur et la hauteur 
-    this.body.setOffset(45, 50); // pour centrer la hitbox si nécessaire
+    this.body.setOffset(45, 50); // Ajuste ces valeurs pour centrer la hitbox si nécessaire
 
   }
 
