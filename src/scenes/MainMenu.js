@@ -42,11 +42,14 @@ export class MainMenu extends Scene {
         align: "center",
       })
       .setOrigin(0.5);
-    this.menuStartMusic = this.sound.add("menuStartMusic", { loop: false });
+    // const menuStartMusic = this.sound.add("menuStartMusic", { loop: false });
+    // if (menuStartMusic) {
+    //   menuStartMusic.play();
+    // }
 
     this.input.once("pointerdown", () => {
-      this.menuStartMusic.play();
       this.scene.start("Game");
+      // this.menuStartMusic.play();
     });
   }
 }
