@@ -29,6 +29,7 @@ export class Preloader extends Scene {
     this.load.image("enemyA", "enemy.png");
     this.load.image("enemyB", "crown.png");
     this.load.image("enemyC", "china.png");
+    this.load.image("coup_de_feu", "coup_de_feu.png");
 
     this.load.spritesheet("player", "DinoSprites-red.png", {
       frameWidth: 24,
