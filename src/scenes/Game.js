@@ -211,6 +211,11 @@ export class Game extends Scene {
     this.increaseScore();
   }
 
+  increaseScore(points) {
+    this.score += 10;
+    this.scoreText.setText("Score : " + this.score);
+  }
+
   handlePlayerEnemyCollision(player, enemy) {
     // Réduire la vie du joueur
     this.lives--;
@@ -218,7 +223,7 @@ export class Game extends Scene {
 
     // Vérifie si le joueur a encore des vies
     if (this.lives <= 0) {
-      this.scene.start("GameOver");
+      this.scene.start("GameOver", { score: this.score });
     }
 
     if (this.enemyGroup.contains(enemy)) {
@@ -239,10 +244,5 @@ export class Game extends Scene {
       }
       star.destroy();
     }
-  }
-
-  increaseScore(points) {
-    this.score += 10;
-    this.scoreText.setText("Score : " + this.score);
   }
 }
