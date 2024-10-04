@@ -27,6 +27,8 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
     this.load.image("logo", "logo.png");
     this.load.image("enemyA", "enemy.png");
+
+    this.load.image("coup_de_feu", "coup_de_feu.png");
     this.load.spritesheet("shroom", "shroom.png", {
       frameWidth: 150,
       frameHeight: 150,
@@ -35,6 +37,7 @@ export class Preloader extends Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
     this.load.spritesheet("ahriman", "ahriman-flight.png", {
       frameWidth: 150,
       frameHeight: 150,
