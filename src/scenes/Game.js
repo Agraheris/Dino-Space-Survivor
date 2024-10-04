@@ -12,7 +12,7 @@ export class Game extends Scene {
   constructor() {
     super("Game");
     this.bossGroup;
-    this.bossSpawnTime = 60000; // 5 minutes en millisecondes
+    this.bossSpawnTime = 300000; // 5 minutes en millisecondes
     this.lastBossSpawnTime = 0;
     this.isBossActive = false;
   }
@@ -506,7 +506,7 @@ export class Game extends Scene {
   }
 
   handlePlayerStarCollision(player, star) {
-    this.score += 10;
+    this.score += 50;
     star.destroy();
   }
   handlePlayerBossCollision(player, boss) {
