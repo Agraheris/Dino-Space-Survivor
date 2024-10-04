@@ -46,7 +46,7 @@ export class Game extends Scene {
 
     // Apparition des étoiles
     this.time.addEvent({
-      delay: 1000, // 1 secondes
+      delay: 12000, // 1 secondes
       callback: this.spawnStar,
       callbackScope: this,
       loop: true, // Répéter l'événement
@@ -100,7 +100,7 @@ export class Game extends Scene {
     });
     this.enemyGroup = this.physics.add.group();
     this.chasingEnemyGroup = this.physics.add.group();
-    this.stars = this.physics.add.group({
+    this.star = this.physics.add.group({
       classType: Star,
       runChildUpdate: true,
     });
@@ -181,6 +181,18 @@ export class Game extends Scene {
     const randomY = Phaser.Math.Between(0, height);
 
     const star = new Star(this, randomX, randomY, "star");
+    this.star.add(star);
+    this.time.delayedCall(
+      5000,
+      () => {
+        if (star && star.active) {
+          // Vérifie si l'étoile existe toujours
+          star.destroy();
+        }
+      },
+      [],
+      this
+    );
   }
 
   update(time) {
@@ -252,16 +264,11 @@ export class Game extends Scene {
     projectile.destroy();
   }
 
-  handlePlayerStarCollision(star) {
-    // Augmente le score du joueur
-    // this.score++;
-    // this.scoreText.setText("Score : " + this.score);
-    if (this.stars.contains(star)) {
-      if (star.shootEvent) {
-        star.shootEvent.remove();
-      }
-      star.destroy();
-    }
+  handlePlayerStarCollision(player, star) {
+    console.info("étoile");
+    this.score += 10;
+    this.scoreText.setText("Score : " + this.score);
+    star.destroy();
   }
 
   increaseScore(points) {
