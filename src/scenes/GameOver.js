@@ -9,9 +9,20 @@ export class GameOver extends Scene {
     this.score = data.score;
   }
 
-  create() {
-    this.cameras.main.setBackgroundColor(0xff0000);
+  // Background
+  createBackground() {
+    const background = this.add.image(0, 0, "skull").setOrigin(0.5);
+    const scaleX = this.scale.width / background.width;
+    const scaleY = 0.6 * (this.scale.height / background.height);
+    background.setScale(scaleX, scaleY);
+    const centerX = this.scale.width / 2;
+    const centerY = this.scale.height / 2;
+    background.setPosition(centerX, centerY);
+  }
 
+  create() {
+    this.cameras.main.setBackgroundColor(0x1d061f);
+    this.createBackground();
 
     this.add
       .text(512, 384, "Game Over", {
