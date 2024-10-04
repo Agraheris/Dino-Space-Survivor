@@ -21,6 +21,10 @@ export class MainMenu extends Scene {
   create() {
     this.cameras.main.setBackgroundColor(0x181a27);
     this.createBackground();
+    const menuStartMusic = this.sound.add("menuStartMusic", { loop: false });
+    if (menuStartMusic) {
+      menuStartMusic.play();
+    } 
     this.add
       .text(530, 590, "*** Click and START ***", {
         fontFamily: "Arial Black",
@@ -34,6 +38,7 @@ export class MainMenu extends Scene {
 
     this.input.once("pointerdown", () => {
       this.scene.start("Game");
+      this.menuStartMusic.play();
     });
   }
 }
