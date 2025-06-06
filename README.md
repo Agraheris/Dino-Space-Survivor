@@ -1,101 +1,250 @@
-# Phaser Vite Template
+# 🦖 Dino Space Survivor
 
-This is a Phaser 3 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
+![Phaser](https://img.shields.io/badge/Phaser-3.80.1-purple?style=for-the-badge&logo=javascript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Game Development](https://img.shields.io/badge/Game_Dev-🎮-brightgreen?style=for-the-badge)
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-vite-ts)**
+> **Hackathon 2 "Le Retour" - Wild Code School | Jeu 2D en JavaScript**
 
-### Versions
+Jeu de survie spatial développé en 72h lors du deuxième hackathon de la Wild Code School. Un dinosaure doit survivre dans l'espace en évitant les projectiles dans un gameplay simple mais addictif inspiré des grands classiques de l'arcade.
 
-This template has been updated for:
+🎮 **[Jouer maintenant](dinospacesurvivor.netlify.app)**
 
-- [Phaser 3.80.1](https://github.com/phaserjs/phaser)
-- [Vite 5.2.11](https://github.com/vitejs/vite)
+## 🎯 Concept du Jeu
 
-![screenshot](screenshot.png)
+### 🦕 Gameplay Principal
+- **Personnage :** Un dinosaure courageux projeté dans l'espace
+- **Objectif :** Survivre le plus longtemps possible en évitant les dangers
+- **Mécaniques :** Déplacement fluide, esquive de projectiles
+- **Progression :** Système de score avec difficulté croissante
 
-## Requirements
+### ⚡ Fonctionnalités de Jeu
+- **Déplacement fluide** avec physique réaliste
+- **Système de collision** précis et responsive
+- **Génération procédurale** d'obstacles projectiles
+- **Effets visuels** et animations fluides
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+## 🚀 Défis du Hackathon
 
-## Available Commands
+### ⏰ Contrainte Temporelle
+**Durée :** 72 heures chrono  
+**Équipe :** Développement collaboratif  
+**Pression :** Livrer un jeu fonctionnel et amusant
 
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
-| `npm run build` | Create a production build in the `dist` folder |
+### 🎯 Objectifs Techniques
+- **Créer un jeu from scratch** avec Phaser 3
+- **Implémenter des mécaniques** de gameplay solides
+- **Optimiser les performances** pour une expérience fluide
+- **Design d'expérience** utilisateur engageante
 
-## Writing Code
+## 🛠️ Stack Technique
 
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
+**Game Engine :**
+- **Phaser 3.80** - Framework de jeu HTML5 avancé
+- **JavaScript ES6+** avec syntaxe moderne
+- **Canvas API** pour le rendu 2D performant
 
-The local development server runs on `http://localhost:8080` by default. Please see the Vite documentation if you wish to change this, or add SSL support.
+**Build & Development :**
+- **Vite** pour un développement rapide et HMR
+- **Asset Pipeline** optimisé pour les ressources de jeu
+- **Hot Reload** pour itération rapide pendant le hackathon
 
-Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
+**Physique & Animation :**
+- **Arcade Physics** de Phaser pour collisions réalistes
+- **Sprite Animations** fluides et optimisées
+- **Particle Systems** pour effets visuels
 
-## Template Project Structure
+## 🎮 Architecture du Jeu
 
-We have provided a default project structure to get you started. This is as follows:
+### 📁 Structure Modulaire Avancée
 
-- `index.html` - A basic HTML page to contain the game.
-- `src` - Contains the game source code.
-- `src/main.js` - The main entry point. This contains the game configuration and starts the game.
-- `src/scenes/` - The Phaser Scenes are in this folder.
-- `public/style.css` - Some simple CSS rules to help with page layout.
-- `public/assets` - Contains the static assets used by the game.
-
-## Handling Assets
-
-Vite supports loading assets via JavaScript module `import` statements.
-
-This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
-
-```js
-import logoImg from './assets/logo.png'
+```
+dino-space-survivor/
+├── public/                    # Assets statiques optimisés
+│   ├── assets/               # Ressources graphiques et audio
+│   │   ├── DinoSprites-red.png    # Sprites animés du personnage
+│   │   ├── DinoSprites.png        # Variantes de sprites
+│   │   ├── ahriman-flight.png     # Boss volant
+│   │   ├── background_stars.webp  # Arrière-plan spatial
+│   │   ├── bullet-red.png         # Projectiles ennemis
+│   │   ├── bullets.png            # Projectiles joueur
+│   │   ├── china.png              # Power-ups
+│   │   ├── coup_de_feu.png        # Effets visuels
+│   │   ├── enemy.png              # Sprites ennemis
+│   │   ├── galaxy.webm            # Vidéo d'arrière-plan
+│   │   ├── shroom.png             # Champignons bonus
+│   │   ├── skull.svg              # Icônes de game over
+│   │   ├── snowman.png            # Boss final Snowman
+│   │   ├── star.png               # Collectibles
+│   │   └── unicorn.png            # Boss intermédiaire
+│   ├── Audio/               # Bande sonore immersive
+│   │   ├── Bim_erreur.wav        # SFX erreur
+│   │   ├── Cest_parti.wav        # SFX début partie
+│   │   └── startKahoot.wav       # Musique de lancement
+│   ├── favicon.png          # Icône de l'application
+│   └── style.css           # Styles CSS globaux
+│
+├── src/                     # Code source organisé en MVC
+│   ├── class/              # Classes métier Phaser
+│   │   ├── Ahriman.js          # Boss aérien avec IA complexe
+│   │   ├── Boss.js             # Classe parent des boss
+│   │   ├── Confetti.js         # Effets de particules victoire
+│   │   ├── Player.js           # Logique joueur et contrôles
+│   │   ├── Projectile.js       # Gestion des projectiles
+│   │   ├── Shroom.js           # Ennemis mushroom
+│   │   ├── Star.js             # Collectibles étoiles
+│   │   └── Unicorn.js          # Boss final licorne
+│   ├── scenes/             # Scènes de jeu modulaires
+│   │   ├── Boot.js             # Chargement initial
+│   │   ├── Game.js             # Scène principale de jeu
+│   │   ├── GameOver.js         # Écran de fin
+│   │   ├── MainMenu.js         # Menu principal
+│   │   └── Preloader.js        # Preloading des assets
+│   └── main.js             # Point d'entrée et configuration
+│
+├── vite/                   # Configuration Vite.js
+│   ├── config.dev.mjs          # Config développement
+│   └── config.prod.mjs         # Config production optimisée
+│
+└── Configuration files
+    ├── package.json            # Dépendances et scripts
+    ├── package-lock.json       # Lock des versions
+    └── index.html             # Point d'entrée HTML
 ```
 
-To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
+### 🎮 Classes de Jeu Sophistiquées
 
-```js
-preload ()
-{
-    //  This is an example of an imported bundled image.
-    //  Remember to import it at the top of this file
-    this.load.image('logo', logoImg);
+**Ennemis & Boss :**
+- **Ahriman.js** - Boss volant avec patterns d'attaque complexes
+- **Boss.js** - Classe parent avec comportements communs
+- **Shroom.js** - Ennemis terrestres avec IA de poursuite  
+- **Unicorn.js** - Boss intermédiaire avec mécaniques spéciales
 
-    //  This is an example of loading a static image
-    //  from the public/assets folder:
-    this.load.image('background', 'assets/bg.png');
-}
+**Gameplay Systems :**
+- **Player.js** - Contrôles, animations, collisions avancées
+- **Projectile.js** - Système de tir multi-directionnel
+- **Star.js** - Collectibles avec effets visuels
+- **Confetti.js** - Système de particules pour feedback
 ```
 
-When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
+## 🚀 Installation et Démarrage
 
-## Deploying to Production
+### Prérequis
+- Node.js 16+
+- npm ou yarn
 
-After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
+### Lancement Rapide
 
-In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
+```bash
+# Cloner le repository
+git clone https://github.com/Agraheris/Dino-Space-Survivor.git
+cd Dino-Space-Survivor
 
-## Customizing the Template
+# Installer les dépendances
+npm install
 
-### Vite
+# Lancer en mode développement
+npm run dev
+```
 
-If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
+Le jeu sera accessible sur [http://localhost:8080](http://localhost:8080)
 
-## Join the Phaser Community!
+### Build de Production
 
-We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
+```bash
+# Créer le build optimisé
+npm run build
 
-**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
-**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
-**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
-**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
-**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
+# Les fichiers de production seront dans le dossier dist/
+```
 
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+## 🎯 Mécaniques de Jeu Implémentées
 
-The Phaser logo and characters are &copy; 2011 - 2024 Phaser Studio Inc.
+### 🕹️ Contrôles
+- **Déplacement :** Flèches directionnelles ou WASD
+- **Action :** Barre d'espace pour actions spéciales
+- **Pause :** Échap pour mettre en pause
 
-All rights reserved.
+### 💎 Système de Score
+- **Points de survie :** Temps passé sans collision avec les astéroïdes
+- **Système simple** mais efficace et addictif
+- **Difficulté progressive :** Vitesse et densité d'astéroïdes croissantes
+
+### 🌟 Mécaniques Principales
+- **Mouvement fluide** du dinosaure dans l'espace
+- **Collision detection** précise avec les astéroïdes
+- **Spawn d'obstacles** aléatoire et progressif
+- **Game over** et système de restart
+
+## 🏆 Résultats du Hackathon
+
+**Achievement débloqués :**
+- ✅ **Jeu fonctionnel** livré dans les temps
+- ✅ **Gameplay addictif** et rejouabilité
+- ✅ **Collaboration efficace** en équipe
+- ✅ **Code propre** malgré la contrainte de temps
+- ✅ **Présentation réussie** devant jury/peers
+
+## 💡 Compétences Développées
+
+### 🎮 Game Development
+- **Phaser 3 mastery** - Moteur de jeu professionnel
+- **Game Design patterns** - Architecture de jeu scalable
+- **Physics & Collisions** - Gestion précise des interactions
+- **Performance optimization** - 60 FPS constant
+
+### 🚀 Développement Agile
+- **Rapid prototyping** sous contrainte temporelle
+- **Feature prioritization** - MVP puis améliorations
+- **Team collaboration** efficace sous pression
+- **Problem solving** créatif et rapide
+
+### 🎨 Expérience Utilisateur
+- **Game Feel** - Sensation de jeu satisfaisante
+- **Feedback loops** - Réactions immédiates du jeu
+- **Progressive difficulty** - Courbe d'apprentissage équilibrée
+- **Visual polish** - Finition soignée malgré le temps limité
+
+## 🎨 Aperçu Visuel
+
+*[Captures d'écran à ajouter]*
+- Écran de menu principal
+- Gameplay en action avec dinosaure et astéroïdes
+- Interface de score et power-ups
+- Écran de game over avec high score
+
+## 🔄 Améliorations Possibles
+
+**Fonctionnalités futures :**
+- Multijoueur local en écran partagé
+- Système de niveaux et boss fights
+- Customisation du dinosaure
+- Leaderboard en ligne
+- Mobile responsiveness
+
+## 🌟 Points Forts du Projet
+
+### 🎯 **Différenciation Technique**
+Ce projet démontre ma **polyvalence** au-delà du développement web classique :
+- **Game development** avec Phaser 3
+- **Logique de jeu** complexe et états multiples
+- **Optimisation performance** pour animations fluides
+- **Gestion d'événements** temps réel
+
+### 🚀 **Soft Skills Démontrées**
+- **Créativité** sous contrainte de temps
+- **Adaptabilité** face aux défis techniques
+- **Esprit d'équipe** en situation de stress
+- **Gestion de projet** avec deadline fixe
+
+## 👨‍💻 Équipe de Développement
+
+**Hackathon Wild Code School** - Équipe collaborative  
+**Développeur :** Clément Vigouroux  
+**Durée :** 72h de développement intensif  
+**Technologies :** Phaser 3, JavaScript, Vite
+
+---
+
+*🎮 Développé avec passion lors du Hackathon "Le Retour" - Démonstration de créativité et polyvalence technique*
