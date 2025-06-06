@@ -163,18 +163,15 @@ npm run build
 
 ### 🕹️ Contrôles
 - **Déplacement :** Flèches directionnelles ou WASD
-- **Action :** Barre d'espace pour actions spéciales
-- **Pause :** Échap pour mettre en pause
 
 ### 💎 Système de Score
-- **Points de survie :** Temps passé sans collision avec les astéroïdes
+
 - **Système simple** mais efficace et addictif
-- **Difficulté progressive :** Vitesse et densité d'astéroïdes croissantes
+- **Difficulté progressive :** Vitesse et densité de projectiles
 
 ### 🌟 Mécaniques Principales
 - **Mouvement fluide** du dinosaure dans l'espace
-- **Collision detection** précise avec les astéroïdes
-- **Spawn d'obstacles** aléatoire et progressif
+- **Collision detection** précise avec les  projectiles
 - **Game over** et système de restart
 
 ## 🏆 Résultats du Hackathon
@@ -208,9 +205,9 @@ npm run build
 
 ## 🎨 Aperçu Visuel
 
-*[Captures d'écran à ajouter]*
+
 - Écran de menu principal
-- Gameplay en action avec dinosaure et astéroïdes
+- Gameplay en action avec dinosaure et  projectiles
 - Interface de score et power-ups
 - Écran de game over avec high score
 
